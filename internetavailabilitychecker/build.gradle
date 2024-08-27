@@ -7,14 +7,14 @@ ext {
 
     libraryDescription = 'a library to check if android device has active internet connection or not'
 
-    siteUrl = 'https://github.com/AggarwalAnkit/InternetAvailabilityChecker'
-    gitUrl = 'https://github.com/AggarwalAnkit/InternetAvailabilityChecker.git'
+    siteUrl = 'https://github.com/volvogroup-mobility/InternetAvailabilityChecker'
+    gitUrl = 'https://github.com/volvogroup-mobility/InternetAvailabilityChecker.git'
 
-    libraryVersion = '1.0.4'
+    libraryVersion = '1.0.4+volvo1'
 
-    developerId = 'ankit'
-    developerName = 'Ankit Aggarwal'
-    developerEmail = 'aggarwal.ankit92@yahoo.in'
+    developerId = 'volvogroup-mobility'
+    developerName = 'VolvoGroup Mobility'
+    developerEmail = 'support.mcoe@volvo.com'
 
     licenseName = 'The Apache Software License, Version 2.0'
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
