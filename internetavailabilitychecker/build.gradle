@@ -22,7 +22,7 @@ ext {
 }
 
 android {
-    compileSdk 28
+    compileSdk 34
 
     defaultConfig {
         minSdkVersion 14

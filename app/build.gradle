@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk 28
+    compileSdk 34
     defaultConfig {
         applicationId "com.treebo.internetconnectivitylistener"
         minSdkVersion 16
