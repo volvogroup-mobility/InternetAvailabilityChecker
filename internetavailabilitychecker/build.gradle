@@ -1,25 +1,5 @@
 apply plugin: 'com.android.library'
-
-ext {
-    publishedGroupId = 'com.treebo'
-    libraryName = 'InternetAvailabilityChecker'
-    artifact = 'internetavailabilitychecker'
-
-    libraryDescription = 'a library to check if android device has active internet connection or not'
-
-    siteUrl = 'https://github.com/volvogroup-mobility/InternetAvailabilityChecker'
-    gitUrl = 'https://github.com/volvogroup-mobility/InternetAvailabilityChecker.git'
-
-    libraryVersion = '1.0.4+volvo1'
-
-    developerId = 'volvogroup-mobility'
-    developerName = 'VolvoGroup Mobility'
-    developerEmail = 'support.mcoe@volvo.com'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
+apply plugin: 'maven-publish'
 
 android {
     compileSdk 34
@@ -31,12 +11,67 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     namespace 'com.treebo.internetavailabilitychecker'
+
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+        }
+    }
 }
 
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'com.treebo'
+            artifactId = 'internetavailabilitychecker'
+            version = '1.0.4+volvo1'
+
+            afterEvaluate {
+                from components.release
+            }
+
+            pom {
+                name = 'InternetAvailabilityChecker'
+                description = 'A library to check if android device has active internet connection or not'
+                url = 'https://github.com/volvogroup-mobility/InternetAvailabilityChecker'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'volvogroup-mobility'
+                        name = 'VolvoGroup Mobility'
+                        email = 'support.mcoe@volvo.com'
+                    }
+                }
+                scm {
+                    connection = 'https://github.com/volvogroup-mobility/InternetAvailabilityChecker.git'
+                    developerConnection = 'https://github.com/volvogroup-mobility/InternetAvailabilityChecker.git'
+                    url = 'https://github.com/volvogroup-mobility/InternetAvailabilityChecker'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            credentials {
+                username "Azure DevOps Services"
+                //The Azure DevOps Services build system will use the "SYSTEM_ACCESSTOKEN" to authenticate to Azure DevOps Services feeds
+                password System.getenv("SYSTEM_ACCESSTOKEN") != null ? System.getenv("SYSTEM_ACCESSTOKEN") : vstsMavenAccessToken
+            }
+            url 'https://pkgs.dev.azure.com/volvogroup/MCoE/_packaging/mcoe-java/maven/v1'
+        }
+    }
+}
