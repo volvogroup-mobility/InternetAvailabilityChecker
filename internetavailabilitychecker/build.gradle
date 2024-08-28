@@ -1,53 +1,77 @@
 apply plugin: 'com.android.library'
-
-ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'internet-availability-checker'
-
-    publishedGroupId = 'com.treebo'
-    libraryName = 'InternetAvailabilityChecker'
-    artifact = 'internetavailabilitychecker'
-
-    libraryDescription = 'a library to check if android device has active internet connection or not'
-
-    siteUrl = 'https://github.com/AggarwalAnkit/InternetAvailabilityChecker'
-    gitUrl = 'https://github.com/AggarwalAnkit/InternetAvailabilityChecker.git'
-
-    libraryVersion = '1.0.4'
-
-    developerId = 'ankit'
-    developerName = 'Ankit Aggarwal'
-    developerEmail = 'aggarwal.ankit92@yahoo.in'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
+apply plugin: 'maven-publish'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+    compileSdk 34
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
-        versionCode 3
-        versionName "1.0.4"
+        targetSdkVersion 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    namespace 'com.treebo.internetavailabilitychecker'
+
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+        }
+    }
 }
 
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-}
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'com.treebo'
+            artifactId = 'internetavailabilitychecker'
+            version = '1.0.4+volvo1'
 
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+            afterEvaluate {
+                from components.release
+            }
+
+            pom {
+                name = 'InternetAvailabilityChecker'
+                description = 'A library to check if android device has active internet connection or not'
+                url = 'https://github.com/volvogroup-mobility/InternetAvailabilityChecker'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'volvogroup-mobility'
+                        name = 'VolvoGroup Mobility'
+                        email = 'support.mcoe@volvo.com'
+                    }
+                }
+                scm {
+                    connection = 'https://github.com/volvogroup-mobility/InternetAvailabilityChecker.git'
+                    developerConnection = 'https://github.com/volvogroup-mobility/InternetAvailabilityChecker.git'
+                    url = 'https://github.com/volvogroup-mobility/InternetAvailabilityChecker'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            credentials {
+                username "Azure DevOps Services"
+                //The Azure DevOps Services build system will use the "SYSTEM_ACCESSTOKEN" to authenticate to Azure DevOps Services feeds
+                password System.getenv("SYSTEM_ACCESSTOKEN") != null ? System.getenv("SYSTEM_ACCESSTOKEN") : vstsMavenAccessToken
+            }
+            url 'https://pkgs.dev.azure.com/volvogroup/MCoE/_packaging/mcoe-java/maven/v1'
+        }
+    }
+}
